@@ -2,7 +2,7 @@ import requests
 import time
 import re
 
-URL = "https://engine.freerice.com/games/afc36aae-af05-4c62-87b9-816ebfbe665d/answer"
+URL = "https://engine.freerice.com/games/ead5884d-b76d-4bfe-bc78-e723996a7dbf/answer"
 
 data = {
     "answer": "c41c4b66-4a08-4bbc-8c14-ece8b9cd264c",
