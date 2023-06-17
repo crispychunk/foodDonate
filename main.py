@@ -1,3 +1,4 @@
+import sys
 import requests
 import time
 import re
@@ -36,12 +37,9 @@ def call_server():
 
     while True:
         try:
-            if try_header:
-                response = requests.patch(URL, json=data, headers=headers)
-            else:
-                response = requests.patch(URL, json=data)
-
+            response = requests.patch(URL, json=data, headers=headers)
             response_data = response.json()
+            if (response.status_code == 429): raise Exception("429")
             question_id = response_data["data"]["attributes"]["question_id"]
             data["question"] = question_id
 
@@ -57,17 +55,21 @@ def call_server():
                     break
 
             rice_count = response_data["data"]["attributes"]["rice"]
-            print("TOTAL RICE COUNT:", rice_count)
+            sys.stdout.flush()
+            print("TOTAL RICE COUNT:", rice_count, end="\r")
 
-            sleep(1400)
+
+            sleep(2500)
             error_count = 0  # Reset error count if request was successful
-        except requests.exceptions.RequestException as error:
+        except Exception as error:
             print("Error:", str(error))
             error_count += 1
             if error_count > 5:
                 print("Exceeded maximum error count. Quitting program.")
                 return
             try_header = not try_header
+            if (error_count > 3):
+                sleep(1800000)
             sleep(1500)
 
 call_server()
