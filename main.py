@@ -2,6 +2,7 @@ import sys
 import requests
 import time
 import re
+from datetime import datetime
 
 URL = "https://engine.freerice.com/games/e6a2d8da-2623-495f-aae4-0bdddc167f51/answer"
 
@@ -56,20 +57,26 @@ def call_server():
 
             rice_count = response_data["data"]["attributes"]["rice"]
             sys.stdout.flush()
-            print("TOTAL RICE COUNT:", rice_count, end="\r")
-
+            print("CURRENT RICE COUNT:", rice_count, end="\r")
 
             sleep(2500)
             error_count = 0  # Reset error count if request was successful
         except Exception as error:
-            print("Error:", str(error))
+            now = datetime.now()
+
+            current_time = now.strftime("%H:%M:%S")       
+            print("Error:", str(error), "at time:", current_time)
             error_count += 1
             if error_count > 5:
                 print("Exceeded maximum error count. Quitting program.")
                 return
             try_header = not try_header
             if (error_count > 3):
+                print("Sleeping for 30 minutes...")
                 sleep(1800000)
+            if (error_count > 4):
+                print("Sleeping for 1 hour...")
+                sleep(3600000)
             sleep(1500)
 
 call_server()
