@@ -1,3 +1,4 @@
+import random
 import sys
 import requests
 import time
@@ -63,7 +64,8 @@ def call_server():
             sys.stdout.flush()
             print("CURRENT RICE COUNT:", rice_count, end="\r")
 
-            sleep(2500)
+            sleep_time = 1000 + random.randint(0, 3000)
+            sleep(sleep_time)
             error_count = 0  # Reset error count if request was successful
         except Exception as error:
             now = datetime.now()
