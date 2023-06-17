@@ -29,6 +29,7 @@ def extract_numbers(string):
         return None
 
 try_header = True
+errorCount = 0
 
 def call_server():
     global data, try_header
@@ -39,7 +40,8 @@ def call_server():
                 response = requests.patch(URL, json=data, headers=headers)
             else:
                 response = requests.patch(URL, json=data)
-
+            
+            errorCount = 0
             response_data = response.json()
             question_id = response_data["data"]["attributes"]["question_id"]
             data["question"] = question_id
@@ -60,8 +62,11 @@ def call_server():
 
             sleep(2000)
         except requests.exceptions.RequestException as error:
+            errorCount = errorCount + 1
             print("Error:", str(error))
             try_header = not try_header
             sleep(1500)
+            if (errorCount > 5): 
+                exit()
 
 call_server()
