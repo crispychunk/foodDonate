@@ -2,7 +2,7 @@ import requests
 import time
 import re
 
-URL = "https://engine.freerice.com/games/ead5884d-b76d-4bfe-bc78-e723996a7dbf/answer"
+URL = "https://engine.freerice.com/games/afc36aae-af05-4c62-87b9-816ebfbe665d/answer"
 
 data = {
     "answer": "c41c4b66-4a08-4bbc-8c14-ece8b9cd264c",
@@ -29,10 +29,10 @@ def extract_numbers(string):
         return None
 
 try_header = True
-errorCount = 0
+error_count = 0
 
 def call_server():
-    global data, try_header
+    global data, try_header, error_count
 
     while True:
         try:
@@ -40,8 +40,7 @@ def call_server():
                 response = requests.patch(URL, json=data, headers=headers)
             else:
                 response = requests.patch(URL, json=data)
-            
-            errorCount = 0
+
             response_data = response.json()
             question_id = response_data["data"]["attributes"]["question_id"]
             data["question"] = question_id
@@ -60,13 +59,15 @@ def call_server():
             rice_count = response_data["data"]["attributes"]["rice"]
             print("TOTAL RICE COUNT:", rice_count)
 
-            sleep(2000)
+            sleep(1400)
+            error_count = 0  # Reset error count if request was successful
         except requests.exceptions.RequestException as error:
-            errorCount = errorCount + 1
             print("Error:", str(error))
+            error_count += 1
+            if error_count > 5:
+                print("Exceeded maximum error count. Quitting program.")
+                return
             try_header = not try_header
             sleep(1500)
-            if (errorCount > 5): 
-                exit()
 
 call_server()
