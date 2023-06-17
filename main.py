@@ -59,7 +59,7 @@ def call_server():
             sys.stdout.flush()
             print("CURRENT RICE COUNT:", rice_count, end="\r")
 
-            sleep(2500)
+            sleep(2000)
             error_count = 0  # Reset error count if request was successful
         except Exception as error:
             now = datetime.now()
