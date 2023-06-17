@@ -42,6 +42,10 @@ def call_server():
     rice_count = 0
 
     while True:
+        sleep_time = 1000 + random.randint(0, 3000)
+        sleep(sleep_time)
+
+
         try:
             response = requests.patch(URL, json=data, headers=headers)
             response_data = response.json()
@@ -64,14 +68,12 @@ def call_server():
             sys.stdout.flush()
             print("CURRENT RICE COUNT:", rice_count, end="\r")
 
-            sleep_time = 1000 + random.randint(0, 3000)
-            sleep(sleep_time)
             error_count = 0  # Reset error count if request was successful
         except Exception as error:
             now = datetime.now()
 
             current_time = now.strftime("%H:%M:%S")     
-            print("CURRENT RICE COUNT:", rice_count, end="\r")  
+            print("CURRENT RICE COUNT:", rice_count)  
             print("Error:", str(error), "at time:", current_time)
             
             error_count += 1
@@ -88,6 +90,5 @@ def call_server():
             if (error_count > 5):
                 print("Sleeping for 2 hour...")
                 sleep(7200000)
-            sleep(1500)
 
 call_server()
