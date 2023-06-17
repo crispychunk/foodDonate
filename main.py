@@ -36,6 +36,10 @@ error_count = 0
 def call_server():
     global data, try_header, error_count
 
+    print("Welcome to FREE RICE v3.0")
+    print("Created by: Crispin and Naichen\n")
+    rice_count = 0
+
     while True:
         try:
             response = requests.patch(URL, json=data, headers=headers)
@@ -59,15 +63,17 @@ def call_server():
             sys.stdout.flush()
             print("CURRENT RICE COUNT:", rice_count, end="\r")
 
-            sleep(2000)
+            sleep(2500)
             error_count = 0  # Reset error count if request was successful
         except Exception as error:
             now = datetime.now()
 
-            current_time = now.strftime("%H:%M:%S")       
+            current_time = now.strftime("%H:%M:%S")     
+            print("CURRENT RICE COUNT:", rice_count, end="\r")  
             print("Error:", str(error), "at time:", current_time)
+            
             error_count += 1
-            if error_count > 5:
+            if error_count > 6:
                 print("Exceeded maximum error count. Quitting program.")
                 return
             try_header = not try_header
@@ -77,6 +83,9 @@ def call_server():
             if (error_count > 4):
                 print("Sleeping for 1 hour...")
                 sleep(3600000)
+            if (error_count > 5):
+                print("Sleeping for 2 hour...")
+                sleep(7200000)
             sleep(1500)
 
 call_server()
