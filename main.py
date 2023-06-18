@@ -5,7 +5,7 @@ import time
 import re
 from datetime import datetime
 
-URL = "https://engine.freerice.com/games/e6a2d8da-2623-495f-aae4-0bdddc167f51/answer"
+URL = "https://engine.freerice.com/games/6d41b59d-2623-42f6-84b4-6a4cef46044d/answer"
 
 data = {
     "answer": "c41c4b66-4a08-4bbc-8c14-ece8b9cd264c",
@@ -42,12 +42,12 @@ def call_server():
     rice_count = 0
 
     while True:
-        sleep_time = 1000 + random.randint(0, 3000)
+        sleep_time = 3500 + random.randint(0, 200)
         sleep(sleep_time)
 
 
         try:
-            response = requests.patch(URL, json=data, headers=headers)
+            response = requests.patch(URL, json=data)
             response_data = response.json()
             if (response.status_code == 429): raise Exception("429")
             question_id = response_data["data"]["attributes"]["question_id"]
